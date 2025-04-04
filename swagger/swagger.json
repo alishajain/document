@@ -1,0 +1,203 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Document Management System API",
+    "version": "1.0.0",
+    "description": "API for managing documents with revision control and sharing features"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Development server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Documents",
+      "description": "Operations related to document management"
+    }
+  ],
+  "paths": {
+    "/documents": {
+      "post": {
+        "tags": ["Documents"],
+        "summary": "Upload a new document",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The document file to upload"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "Project Proposal"
+                  },
+                  "content": {
+                    "type": "string",
+                    "example": "This document contains..."
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Initial draft of project proposal"
+                  }
+                },
+                "required": ["file", "title"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Document uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Document"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [{ "bearerAuth": [] }]
+      },
+      "get": {
+        "tags": ["Documents"],
+        "summary": "Get list of documents",
+        "responses": {
+          "200": {
+            "description": "A list of documents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Document"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/documents/{id}": {
+      "put": {
+        "tags": ["Documents"],
+        "summary": "Update a document",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the document to update",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Updated document file"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Document updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Document"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Document not found"
+          }
+        },
+        "security": [{ "bearerAuth": [] }]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Document": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "example": "Project Proposal"
+          },
+          "description": {
+            "type": "string",
+            "example": "Initial draft"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
