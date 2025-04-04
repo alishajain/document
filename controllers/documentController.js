@@ -52,7 +52,7 @@ exports.updateDocument = async (req, res) => {
 
     let revisionId = null;
 
-    // Check if description changed to determine if we need a new revision
+    // Check if description changed
     if (description !== document.description) {
       const version = (await Revision.countByDocumentId(id)) + 1;
 
