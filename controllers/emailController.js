@@ -127,7 +127,7 @@ exports.shareDocument = async (req, res) => {
     const result = await sendDocumentLink(
       email,
       documentUrl,
-      new Date(Date.now() + 60000) // 1 minute from now
+      new Date(Date.now() + 60000)
     );
 
     res.json({

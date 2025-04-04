@@ -26,7 +26,7 @@ class StorageService {
       "application/rtf",
       "application/vnd.oasis.opendocument.text",
     ];
-    this.maxFileSize = parseInt(process.env.MAX_FILE_SIZE) || 10 * 1024 * 1024; // 10MB default
+    this.maxFileSize = parseInt(process.env.MAX_FILE_SIZE) || 10 * 1024 * 1024;
     this.initializeStorage();
   }
 
